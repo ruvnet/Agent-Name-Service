@@ -52,8 +52,20 @@ const analyzeAgentSecurity = new Step({
     const response = await securityAnalysisAgent.stream([
       {
         role: 'user',
-        content: `Perform security analysis on the following agent data:\n\n${JSON.stringify(agentInput, null, 2)}`,
+        content: `Perform security analysis on the following agent data and return ONLY a valid JSON response with these fields:
+        - threatScore: number from 0-100
+        - severity: string ("INFO", "LOW", "MEDIUM", "HIGH", "CRITICAL")
+        - threats: array of threat objects with {type, confidence, evidence, impact, mitigation}
+        - recommendedActions: array of strings
+        - summary: string summary of findings
+
+        Agent data:
+        ${JSON.stringify(agentInput, null, 2)}`,
       },
+      {
+        role: 'system',
+        content: 'You must respond with ONLY valid JSON. Do not include any explanations, markdown, or text outside of the JSON object.'
+      }
     ]);
 
     // Collect the streamed response
@@ -135,11 +147,16 @@ function transformThreatsToCategories(threats: any[]) {
 }
 
 // Create the security workflow
-export const securityWorkflow = new Workflow({
+const securityWorkflowBuilder = new Workflow({
   name: 'agent-security-workflow',
   triggerSchema: agentDataSchema,
-})
-  .step(analyzeAgentSecurity);
+});
 
-// Commit the workflow
-securityWorkflow.commit();
+// Add steps to the workflow
+securityWorkflowBuilder.step(analyzeAgentSecurity);
+
+// Commit the workflow to make it active
+securityWorkflowBuilder.commit();
+
+// Export the committed workflow
+export const securityWorkflow = securityWorkflowBuilder;

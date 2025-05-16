@@ -1,12 +1,19 @@
-// Import the weather workflow components
+// Import the workflows
 import { openai } from '@ai-sdk/openai';
 import { Agent } from '@mastra/core/agent';
 import { Step, Workflow } from '@mastra/core/workflows';
 import { z } from 'zod';
 
-// Import the security workflow
+// Import all workflows
 import { securityWorkflow } from './security-workflow';
+import { agentRegistrationWorkflow } from './agent-registration-workflow';
+import { certificateRotationWorkflow } from './certificate-rotation-workflow';
+import { agentResolutionWorkflow } from './agent-resolution-workflow';
+import { securityMonitoringWorkflow } from './security-monitoring-workflow'; 
+import { protocolTranslationWorkflow } from './protocol-translation-workflow';
+import { agentCapabilityDiscoveryWorkflow } from './agent-capability-discovery-workflow';
 
+// Weather agent and workflow (existing implementation)
 const llm = openai('gpt-4o');
 
 const agent = new Agent({
@@ -186,5 +193,14 @@ const weatherWorkflow = new Workflow({
 
 weatherWorkflow.commit();
 
-// Export both workflows
-export { weatherWorkflow, securityWorkflow };
+// Export all workflows
+export { 
+  weatherWorkflow, 
+  securityWorkflow,
+  agentRegistrationWorkflow,
+  certificateRotationWorkflow,
+  agentResolutionWorkflow,
+  securityMonitoringWorkflow,
+  protocolTranslationWorkflow,
+  agentCapabilityDiscoveryWorkflow
+};
