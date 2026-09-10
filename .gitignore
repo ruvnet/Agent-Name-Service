@@ -134,3 +134,12 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+.venv/
+__pycache__/
+*.pyc
+node_modules/
+*.db
+*.db-*
+.harness/**/dist/
+.harness/**/target/
