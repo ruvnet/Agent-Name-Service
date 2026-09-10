@@ -1,50 +1,10 @@
+/** Historical mock service retired. Use v2/identity.mjs for real signed bindings. */
 export class CertificateService {
-    public initialized: boolean = false;
-
-    async initialize() {
-        this.initialized = true;
-    }
-
-
-    async revokeCertificate(id: string, reason: string) {
-        return {
-            id,
-            status: 'revoked',
-            reason,
-            timestamp: new Date().toISOString()
-        };
-    }
-
-    async renewCertificate(id: string) {
-        return {
-            id,
-            status: 'renewed',
-            newExpiration: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString()
-        };
-    }
-
-    async generateKeyPair() {
-        return {
-            publicKey: 'mockPublicKey',
-            privateKey: 'mockPrivateKey',
-            algorithm: 'RSA'
-        };
-    }
-    generateCertificate(subject: string) {
-        return {
-            subject,
-            publicKey: 'mockPublicKey',
-            status: 'VALID',
-            fingerprint: 'mockFingerprint'
-        };
-    }
-
-    validateCertificate(certificate: string) {
-        return {
-            valid: certificate.includes('Certificate'),
-            certificate,
-            reason: certificate.includes('Certificate') ? undefined : 'Invalid certificate',
-            issuer: 'mockIssuer'
-        };
-    }
+    public initialized = false;
+    async initialize(): Promise<never> { throw new Error('Historical service retired'); }
+    async revokeCertificate(_id: string, _reason: string): Promise<never> { throw new Error('Historical service retired'); }
+    async renewCertificate(_id: string): Promise<never> { throw new Error('Historical service retired'); }
+    async generateKeyPair(): Promise<never> { throw new Error('Historical service retired'); }
+    generateCertificate(_subject: string): never { throw new Error('Historical service retired'); }
+    validateCertificate(_certificate: string) { return {valid: false,reason: 'Historical service retired'}; }
 }
